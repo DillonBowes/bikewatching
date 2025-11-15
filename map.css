@@ -1,0 +1,103 @@
+
+/* Make the map container fill the page */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Map div styling */
+#map {
+  position: relative;   /* Needed for absolute positioning of svg */
+  width: 100%;
+  height: 90vh;         /* Adjust as needed */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* SVG overlay on top of the map */
+#map svg {
+  position: absolute;   /* Sit on top of map */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let map interactions pass through */
+  z-index: 1;           /* Ensure it’s above the map tiles */
+}
+
+/* Color variables used by both circles and legend swatches */
+:root {
+  --color-departures: #1f77b4; /* blue */
+  --color-balanced: #9b59b6;   /* purple */
+  --color-arrivals: darkorange; /* orange */
+}
+
+/* Circles: compute mixed color based on --departure-ratio (0..1) */
+#map svg circle {
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio, 0.5)),
+    var(--color-arrivals)
+  );
+  fill: var(--color);
+  pointer-events: auto;
+  fill-opacity: 0.6;
+  stroke: white;
+}
+
+#controls {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+  margin-bottom: 0.5em;
+}
+
+#controls label {
+  margin-left: auto;
+  font-size: 0.9em;
+}
+
+#controls em {
+  color: #888;
+  font-style: italic;
+  display: block;
+}
+
+#time-slider {
+  width: 250px;
+}
+
+/* Legend styling */
+
+.legend {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 14px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08) inset;
+}
+
+.sw-departures { background: var(--color-departures); }
+.sw-balanced   { background: var(--color-balanced); }
+.sw-arrivals   { background: var(--color-arrivals); }
+
+.legend-label { font-size: 0.95rem; color: #222; }
